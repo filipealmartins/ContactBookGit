@@ -9,6 +9,7 @@ public class Main {
     public static final String ADD_CONTACT    = "AC";
     public static final String REMOVE_CONTACT = "RC";
     public static final String GET_NAME       = "GN";
+    public static final String EQUAL_PHONE    = "EP";
     public static final String GET_PHONE      = "GP";
     public static final String GET_EMAIL      = "GE";
     public static final String SET_PHONE      = "SP";
@@ -20,6 +21,8 @@ public class Main {
     public static final String CONTACT_EXISTS = "contactBook.Contact already exists.";
     public static final String NAME_NOT_EXIST = "contactBook.Contact does not exist.";
     public static final String NUMBER_NOT_EXIST = "Phone number does not exist.";
+    public static final String DIFFERENT_NUMBERS = "All contacts have different phone numbers.";
+    public static final String SAME_NUMBERS = "There are contacts that share phone numbers.";
     public static final String CONTACT_ADDED = "contactBook.Contact added.";
     public static final String CONTACT_REMOVED = "contactBook.Contact removed.";
     public static final String CONTACT_UPDATED = "contactBook.Contact updated.";
@@ -42,6 +45,9 @@ public class Main {
                     break;
                 case GET_NAME:
                     getName(in,cBook);
+                    break;
+                case EQUAL_PHONE:
+                    equalphone(cBook);
                     break;
                 case GET_PHONE:
                     getPhone(in,cBook);
@@ -107,6 +113,35 @@ public class Main {
             System.out.println(cBook.getName(number));
         }
         else System.out.println(NUMBER_NOT_EXIST);
+    }
+
+        private static void equalphone(ContactBook cBook) {
+        cBook.initializeIterator();
+        int[] numbers = new int[cBook.getNumberOfContacts()];
+        int counter = 0;
+        boolean found = false;
+        while( cBook.hasNext() && !found) {
+            int number = cBook.next().getPhone();
+            if (!foundPhone(number, numbers)) {
+                numbers[counter++] = number;
+            } else {
+                found = true;
+            }
+        }
+        if (found) {
+            System.out.println(SAME_NUMBERS);
+        } else {
+            System.out.println(DIFFERENT_NUMBERS);
+        }
+    }
+
+        private static boolean foundPhone(int number, int[] numbers) {
+        for (int i = 0; i < numbers.length; i++) {
+            if (numbers[i] == number) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void getPhone(Scanner in, ContactBook cBook) {
